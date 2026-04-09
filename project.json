@@ -1,0 +1,21 @@
+{
+  "overview": "Mehar Singla Courses is an online course platform for technical trainer Mehar Singla, featuring a public course catalog, student enrollment with progress tracking, an admin panel for course and revenue management, and Stripe checkout in Indian Rupees.",
+  "features": [
+    "Course catalog with search and level filters",
+    "Course detail pages with instructor bios",
+    "Student dashboard with enrolled courses and progress tracking",
+    "Admin panel for course CRUD, thumbnail uploads, and revenue analytics",
+    "Stripe payment integration in Indian Rupees (INR)",
+    "Role-based access control (admin vs. student)"
+  ],
+  "category": "education",
+  "tags": [
+    "courses",
+    "elearning",
+    "education",
+    "training",
+    "india",
+    "rupees"
+  ],
+  "last_updated": "2026-04-09T08:34:42.862Z"
+}

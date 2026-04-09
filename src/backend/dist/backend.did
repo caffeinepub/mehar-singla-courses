@@ -1,0 +1,125 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type StripeSessionStatus = 
+ variant {
+   completed: record {
+                response: text;
+                userPrincipal: opt text;
+              };
+   failed: record {error: text;};
+ };
+type StripeConfiguration = 
+ record {
+   allowedCountries: vec text;
+   secretKey: text;
+ };
+type ShoppingItem = 
+ record {
+   currency: text;
+   priceInCents: nat;
+   productDescription: text;
+   productName: text;
+   quantity: nat;
+ };
+type RevenueSummary = 
+ record {
+   courseId: nat;
+   courseTitle: text;
+   enrollmentCount: nat;
+   totalRevenue: nat;
+ };
+type ProgressStatus = 
+ variant {
+   Completed;
+   InProgress;
+   NotStarted;
+ };
+type InstructorProfile = 
+ record {
+   bio: text;
+   name: text;
+   photoUrl: text;
+ };
+type Enrollment = 
+ record {
+   courseId: nat;
+   enrolledAt: int;
+   progressStatus: ProgressStatus;
+   studentPrincipal: principal;
+ };
+type CourseLevel = 
+ variant {
+   Advanced;
+   Beginner;
+   Intermediate;
+ };
+type Course = 
+ record {
+   createdAt: int;
+   description: text;
+   durationHours: nat;
+   id: nat;
+   level: CourseLevel;
+   modulesCount: nat;
+   price: nat;
+   thumbnailUrl: text;
+   title: text;
+   videoUrl: text;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  createCheckoutSession: (items: vec ShoppingItem, successUrl: text,
+   cancelUrl: text) -> (text);
+  createCourse: (title: text, description: text, price: nat, level:
+   CourseLevel, durationHours: nat, modulesCount: nat, thumbnailUrl: 
+   text, videoUrl: text) -> (Course);
+  createCourseCheckoutSession: (courseId: nat, successUrl: text, cancelUrl:
+   text) -> (text);
+  deleteCourse: (id: nat) -> ();
+  enrollAfterPayment: (courseId: nat, sessionId: text) -> ();
+  getAllEnrollments: () -> (vec Enrollment) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getCourse: (id: nat) -> (opt Course) query;
+  getInstructorProfile: () -> (opt InstructorProfile) query;
+  getMyEnrollments: () -> (vec Enrollment) query;
+  getRevenueSummaries: () -> (vec RevenueSummary) query;
+  getStripeSessionStatus: (sessionId: text) -> (StripeSessionStatus);
+  isCallerAdmin: () -> (bool) query;
+  isEnrolledInCourse: (courseId: nat) -> (bool) query;
+  isStripeConfigured: () -> (bool) query;
+  listCourses: () -> (vec Course) query;
+  setStripeConfiguration: (config: StripeConfiguration) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateCourse: (id: nat, title: text, description: text, price: nat, level:
+   CourseLevel, durationHours: nat, modulesCount: nat, thumbnailUrl: 
+   text, videoUrl: text) -> ();
+  updateInstructorProfile: (name: text, bio: text, photoUrl: text) -> ();
+  updateMyProgressStatus: (courseId: nat, newStatus: ProgressStatus) -> ();
+}

@@ -1,0 +1,62 @@
+// Version: 1.0.0
+type CourseLevel__767990261 = {#Advanced; #Beginner; #Intermediate};
+type Course__321233390 =
+  {
+    createdAt : Int;
+    description : Text;
+    durationHours : Nat;
+    id : Nat;
+    level : CourseLevel__767990261;
+    modulesCount : Nat;
+    price : Nat;
+    thumbnailUrl : Text;
+    title : Text;
+    videoUrl : Text
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type Enrollment__24904575 =
+  {
+    courseId : Nat;
+    enrolledAt : Int;
+    progressStatus : ProgressStatus__990384832;
+    studentPrincipal : Principal
+  };
+type InstructorProfile__720181836 =
+  {bio : Text; name : Text; photoUrl : Text};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type ProgressStatus__990384832 = {#Completed; #InProgress; #NotStarted};
+type StripeConfiguration__96897619 =
+  {allowedCountries : [Text]; secretKey : Text};
+type UserRole__1054455867 = {#admin; #guest; #user};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  stable courses :
+    {
+      var root : Node__46230540<Nat, Course__321233390>;
+      var size : Nat__490723111
+    };
+  stable enrollments :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Enrollment__24904575]];
+      var elementIndex : Nat__490723111
+    };
+  stable instructorProfile : {var profile : ?InstructorProfile__720181836};
+  stable nextCourseId : {var value : Nat};
+  stable stripeConfig : {var config : ?StripeConfiguration__96897619}
+};
